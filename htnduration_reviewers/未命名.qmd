@@ -1,0 +1,33 @@
+---
+title: "main"
+format: html
+editor: visual
+---
+
+## Duration histgram
+
+```{r}
+rm(list = ls())
+library(conflicted)
+library(tidyverse)
+library(readxl)
+
+df <- read_excel('behavioural_sample_label.xlsx') %>% 
+  as_tibble()
+df
+
+df <- df %>% 
+  dplyr::select(BH, JHTSCourseNew) %>% 
+  mutate(JHTSCourseNew = as.numeric(JHTSCourseNew)) %>% 
+  drop_na() %>% 
+  dplyr::filter(JHTSCourseNew > 20)
+
+pdf('HTNDuration_hist_morethan20.pdf')
+hist(
+  df$JHTSCourseNew, 
+  main = 'Histogram of HTN Duration', 
+  ylab = 'Number of participant', 
+  xlab = 'HTN duration(Year)')
+dev.off()
+```
+
